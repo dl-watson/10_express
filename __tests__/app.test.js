@@ -100,4 +100,6 @@ describe("recipe-lab routes", () => {
         });
       });
   });
+
+  it("updates a recipe by id", async () => {});
 });

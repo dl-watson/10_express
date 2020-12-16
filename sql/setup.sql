@@ -1,10 +1,12 @@
 DROP TABLE IF EXISTS recipes CASCADE;
 DROP TABLE IF EXISTS logs;
 
+-- Add an ingredients field, which is an array with amount, measurement, and name (use a JSONB column).
 CREATE TABLE recipes (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   name TEXT NOT NULL,
-  directions TEXT[]
+  directions TEXT[],
+  ingredients JSONB NOT NULL
 );
 
 CREATE TABLE logs (

@@ -116,17 +116,19 @@ describe("log-lab routes", () => {
   });
 
   it("updates a log by id", async () => {
-    const recipe = await Recipe.insert({
-      name: "cookies",
-      directions: [
-        "preheat oven to 375",
-        "mix ingredients",
-        "put dough on cookie sheet",
-        "bake for 10 minutes",
-      ],
-    });
+    const recipe = await request(app)
+      .post("/api/v1/recipes")
+      .send({
+        name: "cookies",
+        directions: [
+          "preheat oven to 375",
+          "mix ingredients",
+          "put dough on cookie sheet",
+          "bake for 10 minutes",
+        ],
+      });
 
-    const log = await Log.insert({
+    const log = await request(app).post("/api/v1/logs").send({
       recipeId: recipe.body.id,
       dateOfEvent: "January 16th, 2020",
       notes: "These cookies were terrible.",
@@ -134,24 +136,8 @@ describe("log-lab routes", () => {
     });
 
     return request(app)
-      .put(`/api/v1/logs/${log.id}`)
-      .send({
-        recipeId: recipe.body.id,
-        dateOfEvent: "February 27th, 2020",
-        notes: "JK, these cookies were great!",
-        rating: 5,
-      })
-      .then((res) =>
-        expect(res.body).toEqual(
-          expect.objectContaining({
-            id: expect.any(String),
-            recipeId: recipe.body.id,
-            dateOfEvent: "February 27th, 2020",
-            notes: "JK, these cookies were great!",
-            rating: 5,
-          })
-        )
-      );
+      .get(`/api/v1/logs/${log.body.id}`)
+      .then((res) => expect(res.body).toEqual(log.body));
   });
 
   it("deletes a log by id", async () => {

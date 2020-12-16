@@ -24,6 +24,7 @@ describe("recipe-lab routes", () => {
           "put dough on cookie sheet",
           "bake for 10 minutes",
         ],
+        ingredients: ["1.5", "cups", "chocolate chips"],
       })
       .then((res) => {
         expect(res.body).toEqual({
@@ -35,6 +36,7 @@ describe("recipe-lab routes", () => {
             "put dough on cookie sheet",
             "bake for 10 minutes",
           ],
+          ingredients: ["1.5", "cups", "chocolate chips"],
         });
       });
   });
@@ -42,9 +44,9 @@ describe("recipe-lab routes", () => {
   it("gets all recipes", async () => {
     const recipes = await Promise.all(
       [
-        { name: "cookies", directions: [] },
-        { name: "cake", directions: [] },
-        { name: "pie", directions: [] },
+        { name: "cookies", directions: [], ingredients: [] },
+        { name: "cake", directions: [], ingredients: [] },
+        { name: "pie", directions: [], ingredients: [] },
       ].map((recipe) => Recipe.insert(recipe))
     );
 
@@ -58,7 +60,11 @@ describe("recipe-lab routes", () => {
   });
 
   it("gets a recipe by id", async () => {
-    const recipe = await Recipe.insert({ name: "cookies", directions: [] });
+    const recipe = await Recipe.insert({
+      name: "cookies",
+      directions: [],
+      ingredients: [],
+    });
 
     return request(app)
       .get(`/api/v1/recipes/${recipe.id}`)
@@ -74,6 +80,7 @@ describe("recipe-lab routes", () => {
         "put dough on cookie sheet",
         "bake for 10 minutes",
       ],
+      ingredients: [],
     });
 
     return request(app)
@@ -86,6 +93,7 @@ describe("recipe-lab routes", () => {
           "put dough on cookie sheet",
           "bake for 10 minutes",
         ],
+        ingredients: ["1.5", "cups", "chocolate chips"],
       })
       .then((res) => {
         expect(res.body).toEqual({
@@ -97,12 +105,17 @@ describe("recipe-lab routes", () => {
             "put dough on cookie sheet",
             "bake for 10 minutes",
           ],
+          ingredients: ["1.5", "cups", "chocolate chips"],
         });
       });
   });
 
   it("updates a recipe by id", async () => {
-    const recipe = await Recipe.insert({ name: "cookies", directions: [] });
+    const recipe = await Recipe.insert({
+      name: "cookies",
+      directions: [],
+      ingredients: [],
+    });
 
     return request(app)
       .delete(`/api/v1/recipes/${recipe.id}`)

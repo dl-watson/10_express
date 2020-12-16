@@ -91,8 +91,25 @@ it("gets all logs", async () => {
     });
 });
 
-it("gets a log by id", async () => {
-  const log = await log.insert({ name: "cookies", directions: [] });
+it.only("gets a log by id", async () => {
+  const recipe = await request(app)
+    .post("/api/v1/recipes")
+    .send({
+      name: "cookies",
+      directions: [
+        "preheat oven to 375",
+        "mix ingredients",
+        "put dough on cookie sheet",
+        "bake for 10 minutes",
+      ],
+    });
+
+  const log = await Log.insert({
+    recipeId: recipe.id,
+    dateOfEvent: "January 16th, 2020",
+    notes: "These cookies were terrible.",
+    rating: 0,
+  });
 
   return request(app)
     .get(`/api/v1/logs/${log.id}`)

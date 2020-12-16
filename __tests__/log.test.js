@@ -11,10 +11,10 @@ describe("log-lab routes", () => {
   });
 
   afterAll(() => {
-    return pool.end();
+    // return pool.end();
   });
 
-  it.only("creates a log", async () => {
+  it("creates a log", async () => {
     const recipe = await request(app)
       .post("/api/v1/recipes")
       .send({
@@ -47,12 +47,39 @@ describe("log-lab routes", () => {
 });
 
 it("gets all logs", async () => {
+  const recipe = await request(app)
+    .post("/api/v1/recipes")
+    .send({
+      name: "cookies",
+      directions: [
+        "preheat oven to 375",
+        "mix ingredients",
+        "put dough on cookie sheet",
+        "bake for 10 minutes",
+      ],
+    });
+
   const logs = await Promise.all(
     [
-      { name: "cookies", directions: [] },
-      { name: "cake", directions: [] },
-      { name: "pie", directions: [] },
-    ].map((log) => log.insert(log))
+      {
+        recipeId: recipe.body.id,
+        dateOfEvent: "January 16th, 2020",
+        notes: "These cookies were terrible.",
+        rating: 0,
+      },
+      {
+        recipeId: recipe.body.id,
+        dateOfEvent: "January 16th, 2020",
+        notes: "These cookies were terrible.",
+        rating: 0,
+      },
+      {
+        recipeId: recipe.body.id,
+        dateOfEvent: "January 16th, 2020",
+        notes: "These cookies were terrible.",
+        rating: 0,
+      },
+    ].map((log) => Log.insert(log))
   );
 
   return request(app)

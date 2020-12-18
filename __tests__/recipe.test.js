@@ -5,8 +5,16 @@ const app = require("../lib/app");
 const Recipe = require("../lib/models/recipe");
 
 describe("recipe-lab routes", () => {
-  beforeEach(() => {
-    return pool.query(fs.readFileSync("./sql/setup.sql", "utf-8"));
+  beforeEach(async () => {
+    await pool.query(fs.readFileSync("./sql/setup.sql", "utf-8"));
+
+    const recipe = await Recipe.insert({
+      name: "cookies",
+      ingredients: [
+        { amount: "1.5", measurement: "cups", name: "chocolate chips" },
+      ],
+      directions: [],
+    });
   });
 
   afterAll(() => {
